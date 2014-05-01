@@ -1,0 +1,190 @@
+////////////// JOY LEFT MOUSE RIGHT 
+
+////////////// T16000M Config for MWO  
+
+////////////// eestileib, 24 Apr 2014
+
+
+
+// Follow instructions to convert joystick to left-handed 
+// Set the switch on bottom of T16000M to "Left" 
+
+// Open and Run this script in "TARGET Script Editor"
+// AFTER plugging in Joystick, BEFORE before starting MWO
+
+// Set in-game JOYX to control analog leg turn
+// All other controls are sent as default key instructions via KB
+
+// Right-hand mouse handles Zoom and all Weapon Fire
+ 
+include "target.tmh"
+
+int main()
+{
+////////////////
+// SYSTEM CONFIG
+
+    // ONLY ONE THRUSTMASTER CONTROLLER USED
+	Configure(&HCougar, MODE_EXCLUDED);
+    Configure(&Joystick, MODE_EXCLUDED);
+	Configure(&Throttle, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);
+	Configure(&RMFD, MODE_EXCLUDED);
+
+    // TURN THE KEYS 
+	if(Init(&EventHandle)) return 1;
+   
+    // KB RATE UPPED FOR THROTTLE CONTROLS
+	SetKBRate(5, 5);
+	
+	// SET TO STANDARD MWO KBD CONFIG
+	SetKBLayout(KB_ENG);
+
+
+///////////
+// JOY AXES
+//
+// PASS THROUGH JOYX     SLIGHTLY INCREASED DEADZONE
+//      REPLACE JOYY     THROTTLE KEY CONTROLS
+//      REPLACE RUDDER   (JOY TWIST) WITH TORSO ALIGNMENT KEYS
+//      REPLACE THROTTLE MOVE WEPS SELECTOR
+
+	// JOY X PASSTHROUGH, NEED TO CONFIG IN GAME TO ANALOG TURN 
+	MapAxis(&T16000, JOYX, DX_X_AXIS);
+	// JOY X BIGGER DEADZONE IN MIDDLE ; LESS ACCIDENTAL TURNING
+	SetSCurve(&T16000, JOYX, 5, 5, 5, 0, 0);
+
+    // JOY Y HACK FOR MWO TO KEEP WALKING WHILE IN BATTLEGRID
+    KeyAxis(&T16000, JOYY, 0, AXMAP2(19, 
+      // AHEAD FULL
+      PULSE+KP0,
+      PULSE+KP9,
+      PULSE+KP8,
+      PULSE+KP7,
+      PULSE+KP6,
+      PULSE+KP5,
+      PULSE+KP4,
+      PULSE+KP3,
+      PULSE+KP2,
+      // STOP AT CENTER
+      PULSE+'x',
+      // BACK UP THROTTLE IS TWICE AS SENSITIVE
+      // USB[0x63] IS KEYPAD DOT / DEL KEY
+      CHAIN(PULSE+KP2, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP4, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP6, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP8, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
+      CHAIN(PULSE+KP0, PULSE+USB[0x63])
+    ));
+
+	// REPLACE JOYSTICK TWIST (RUDDER CONTROL) 
+	//   TWIST SLIGHT LEFT = FREE LOOK
+	//   TWIST HARD LEFT = ARM LOCK
+	//   TWIST RIGHT = ROTATE LEGS TO TORSO
+	KeyAxis(&T16000, RUDDER, 0, AXMAP2(LIST(0, 15, 48, 52,100), L_SHIFT, L_CTL, 0, 'f'));
+
+    // THROTTLE UP MOVES RIGHT IN WGs 
+    // THROTTLE DOWN MOVES DOWN IN WGs
+    KeyAxis(&T16000, THR, 0, AXMAP1(15, PULSE+DARROW, PULSE+RARROW));
+
+
+
+//////////////
+// JOY BUTTONS
+ 
+	// TRIGGER : CLICK TARGET / HOLD MECH INFO
+	MapKey(&T16000, TS1, TEMPO(EXEC("ActKey(KEYON+PULSE+'r');"), 'q')); 
+
+	// MIDDLE THUMB : CLICK BATTLEGRID / HOLD SCOREBOARD
+	MapKey(&T16000, TS2, TEMPO(EXEC("ActKey(KEYON+PULSE+'b');"), TAB));    
+
+	// LEFT THUMB : CLICK WG 6 ALWAYS-ON / HOLD WG 6 OFF
+	MapKey(&T16000, TS3, TEMPO(EXEC("ActKey('6'); ActKey(KEYON+'6');"), EXEC("ActKey('6');")));
+
+	// RIGHT THUMB : JJs
+	MapKey(&T16000, TS4, SPC);
+  
+	// Hat LEFT: UAV
+	MapKey(&T16000, H1L, PULSE+INS);
+
+	// HAT UP: COOLANT        
+	MapKey(&T16000, H1U, PULSE+DEL); 
+
+	// HAT RIGHT: CLICK ARTILLERY / HOLD AIRSTRIKE
+	MapKey(&T16000, H1R, TEMPO(EXEC("ActKey(KEYON+PULSE+HOME);"), EXEC("ActKey(KEYON+PULSE+END);")));
+
+	// HAT DOWN: CLICK POWER / HOLD OVERRIDE
+	MapKey(&T16000, H1D, TEMPO(EXEC("ActKey(KEYON+PULSE+'p');"), 'o'));   
+
+///////////////////////////////////
+// RIGHT SIDE JOYSTICK BASE BUTTONS
+
+	// TOP ROW OUTSIDE : ECM MODE SWAP
+	MapKey(&T16000, B5, 'j');
+  
+	// TOP ROW MIDDLE : CYCLE HEAT & NIGHT VISION
+	MapKey(&T16000, B6, SEQ(PULSE+'h', PULSE+'n', PULSE+'n'));
+  
+	// TOP ROW INSIDE : CLICK WG 6 ALWAYS-ON / HOLD WG 6 OFF
+	MapKey(&T16000, B7, TEMPO(EXEC("ActKey('6'); ActKey(KEYON+'6');"), EXEC("ActKey('6');")));
+
+	// BOTTOM ROW INSIDE : TOGGLE MISSILE DOORS
+	MapKey(&T16000, B8, '/');
+
+	// BOTTOM ROW MIDDLE : WEPS CONTROL
+    // (WEPS SELECTOR MOVED WITH THROTTLE)
+    // CLICK : TOGGLE “WEAPON IN CURRENT WG”
+    // HOLD : TOGGLE “CYCLING FOR CURRENT WG”
+	MapKey(&T16000, B9, TEMPO(EXEC("ActKey(KEYON+PULSE+R_CTL);"), EXEC("ActKey(KEYON+PULSE+BSP);")));
+  
+	// BOTTOM ROW OUTSIDE : OPEN
+	MapKey(&T16000, B10, 0);
+
+/////////////////////////
+// LEFT SIDE BASE BUTTONS 
+
+	// TOP ROW OUTSIDE : ESCAPE
+	MapKey(&T16000, B11, ESC);
+  
+	// TOP ROW MIDDLE : WNIDOWS KEY
+	MapKey(&T16000, B12, L_WIN);
+
+	// TOP ROW INSIDE : ENTER
+	MapKey(&T16000, B13, ENT);
+  
+	// BOTTOM ROW INSIDE : ALT
+	MapKey(&T16000, B14, L_ALT);
+  
+	// BOTTOM ROW MIDDLE : TAB
+	MapKey(&T16000, B15, TAB);
+  
+	// BOTTOM ROW OUTSIDE : CTL-ALT-DEL
+	MapKey(&T16000, B16, L_CTL+L_ALT+DEL);
+    
+
+	printf("GR33TINGS, MECHWARRIOR!");  
+ 
+}
+
+int EventHandle(int type, alias o, int x)
+{
+        DefaultMapping(&o, x);
+}
+
+
+///////////
+// APPENDIX
+
+      //////////////////////////////////////////////
+      // (REFERENCE PASSTHROUGH CODE FOR JOY AXES)
+      //
+	  // JOY Y PASSTHROUGH OVERRIDDEN
+	  //MapAxis(&T16000, JOYY, DX_Y_AXIS0);
+	  // RUDDER PASSTHROUGH OVERRIDDEN
+	  //MapAxis(&T16000, RUDDER, DX_ZROT_AXIS);
+      // THROTTLE PASSTHROUGH OVERRIDDEN
+      //MapAxis(&T16000, THR, DX_SLIDER_AXIS);
