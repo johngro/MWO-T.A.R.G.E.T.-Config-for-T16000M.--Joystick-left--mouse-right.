@@ -150,7 +150,7 @@ int ConfigJoyAxes() {
 } 
 
 
-int ConfigJoystickBaseInsideButtonsMode1() {
+int ConfigJoystickBaseInsideBut3tonsMode1() {
 	// TOP ROW OUTSIDE : ECM MODE SWAP
 	MapKey(&T16000, B5, 'j');
   
@@ -167,8 +167,8 @@ int ConfigJoystickBaseInsideButtonsMode1() {
 
 	// BOTTOM ROW MIDDLE : WEPS CONTROL
     // (WEPS SELECTOR MOVED WITH BOTTOM ROW INSIDE)
-    // CLICK : TOGGLE “WEAPON IN CURRENT WG”
-    // HOLD : TOGGLE “CYCLING FOR CURRENT WG”
+    // CLICK : TOGGLE Â“WEAPON IN CURRENT WGÂ”
+    // HOLD : TOGGLE Â“CYCLING FOR CURRENT WGÂ”
 	MapKey(&T16000, B9, TEMPO(EXEC("ActKey(KEYON+PULSE+R_CTL);"), 
 							  EXEC("ActKey(KEYON+PULSE+BSP);"), 
 							  250));
