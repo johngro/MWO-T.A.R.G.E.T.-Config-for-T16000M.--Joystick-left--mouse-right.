@@ -69,14 +69,13 @@ int ConfigJoystickButtonsMode2() {
 	// Hat LEFT: UAV
 	MapKey(&T16000, H1L, PULSE+INS);
 
-	// HAT UP: COOLANT        
-	MapKey(&T16000, H1U, PULSE+DEL); 
+    // HAT UP: Vision mode
+    MapKey(&T16000, H1U, SEQ(PULSE+'h', PULSE+'n', PULSE+'n'));
 
 	// HAT RIGHT: CLICK ARTILLERY / HOLD AIRSTRIKE
 		   MapKey(&T16000, H1R, TEMPO(EXEC("ActKey(KEYON+PULSE+HOME);"), EXEC("ActKey(KEYON+PULSE+END);"), 250));
 
-	// HAT DOWN: PUSH 1
-	MapKey(&T16000, H1D, '1');	
+    MapKey(&T16000, H1D, PULSE+'j'); // HAT DOWN: ECM toggle
 }
  
 
