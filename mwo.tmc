@@ -12,7 +12,9 @@
 // Open and Run this script in "TARGET Script Editor"
 // AFTER plugging in Joystick, BEFORE before starting MWO
 
-// Set in-game JOYX to control analog leg turn
+// Set in-game:
+//     JOY Axis 2 to control analog leg turn
+//     Throttle decay OFF
 // All other controls are sent as default key instructions via KB
 
 // Right-hand mouse handles Zoom and all Weapon Fire
