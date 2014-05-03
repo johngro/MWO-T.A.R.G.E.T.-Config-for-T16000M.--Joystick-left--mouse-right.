@@ -10,7 +10,9 @@ Joystick takes over all commands that would be done on keyboard, mouse does weap
 
 Must set joystick handedness setting to LEFT on bottom of joystick.
 
-In-game, remap Joystick X-Axis to Turn Legs
+In-game
+  Map joystick Axis2 to Turn Legs
+  Turn off throttle decay
 
 In illustration, two keys separated by a "/" indicates the first key is pulsed on a click. 
 The second key is held on a hold of that key longer than 250ms.  
