@@ -99,10 +99,13 @@ int BasicStartup () {
 	SetKBLayout(KB_ENG);	
 }
 
+int PuttPutt;
+
 int ConfigJoyAxes() {
 // PASS THROUGH JOYX     SLIGHTLY INCREASED DEADZONE
 //      REPLACE JOYY     THROTTLE KEY CONTROLS
-//      REPLACE RUDDER   (JOY TWIST) WITH TORSO ALIGNMENT KEYS
+//      REPLACE RUDDER   (JOY TWIST) WITH TORSO ALIGNMENT
+//                                   AND JJ STUTTER
 //      REPLACE THROTTLE MOVE WEPS SELECTOR
 
 	// JOY X PASSTHROUGH, NEED TO CONFIG IN GAME TO ANALOG TURN 
@@ -137,11 +140,19 @@ int ConfigJoyAxes() {
       CHAIN(PULSE+KP0, PULSE+USB[0x63])
     ));
 
+	PuttPutt = CHAIN(
+					 KEYON+SPC,
+					 D(50),
+					 KEYON+PULSE+SPC
+					 );
+
 	// REPLACE JOYSTICK TWIST (RUDDER CONTROL) 
-	//   TWIST SLIGHT LEFT = FREE LOOK
-	//   TWIST HARD LEFT = ARM LOCK
+	//   TWIST LEFT = PUTT-PUTT JJ FOR HILL CLIMBING
 	//   TWIST RIGHT = ROTATE LEGS TO TORSO
-	KeyAxis(&T16000, RUDDER, 0, AXMAP2(LIST(0, 15, 48, 52,100), L_SHIFT, L_CTL, 0, 'f'));
+	KeyAxis(&T16000, RUDDER, 0, AXMAP2(LIST(0, 48, 52,100), 
+									   REXEC(1,200,"ActKey(PuttPutt);"), 
+									   EXEC("StopAutoRepeat(1);"), 
+									   'f'));
 	
 	/////////////////////////////////////////
     // THROTTLE IN TOP HALF CHOOSES MODE 1
@@ -213,13 +224,13 @@ int ConfigJoystickBaseButtonsMode1() {
 int SetConfigurationMode1() {
 	ConfigJoystickButtonsMode1();
 	ConfigJoystickBaseButtonsMode1();	
-	printf("Configuration 1 Chosen.");
+	printf("Configuration 1 Chosen.\xa");
 } 
 
 int SetConfigurationMode2 () {
 	ConfigJoystickButtonsMode2();
 	ConfigJoystickBaseButtonsMode1();
-	printf("Configuration 2 Chosen.");
+	printf("Configuration 2 Chosen.\xa");
 }
 
 
@@ -229,19 +240,19 @@ int main() {
 	////////////////
 	// SYSTEM CONFIG
 	BasicStartup();
-	printf("BASIC STARTUP COMPL3T3");
+	printf("BASIC STARTUP COMPL3T3\xa");
 
 	/////////////////////
 	// JOY AXES ARE FIXED
 	ConfigJoyAxes();
-	printf("JOY AX3S CONFIGURED");
+	printf("JOY AX3S CONFIGURED\xa");
 
 	////////////////////////////////
 	// START WITH CONFIG 1
 	// CHOOSE CONFIG 2 WITH THROTTLE
 	SetConfigurationMode1();
 
-	printf("GR33TINGS, MECHWARRIOR!");
+	printf("GR33TINGS, MECHWARRIOR!\xa");
 }
 
 int EventHandle(int type, alias o, int x) {
