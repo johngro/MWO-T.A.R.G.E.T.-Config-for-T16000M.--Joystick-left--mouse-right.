@@ -61,7 +61,7 @@ int ConfigJoystickButtonsMode2() {
 	MapKey(&T16000, TS2, TEMPO(EXEC("ActKey(KEYON+PULSE+'b');"), TAB, 250));
 
 	// LEFT THUMB : CLICK WG 6 ALWAYS-ON / HOLD WG 6 OFF
-		   MapKey(&T16000, TS3, TEMPO(EXEC("ActKey('6'); ActKey(KEYON+'6');"), EXEC("ActKey('6');"), 250));
+    MapKey(&T16000, TS3, TEMPO(EXEC("ActKey('6'); ActKey(KEYON+'6');"), EXEC("ActKey('6');"), 250));
 
 	// RIGHT THUMB : JJs
 	MapKey(&T16000, TS4, SPC);
@@ -92,8 +92,8 @@ int BasicStartup () {
     // TURN THE KEYS 
 	if(Init(&EventHandle)) return 1;
    
-    // KB RATE UPPED FOR THROTTLE CONTROLS
-	SetKBRate(5, 5);
+    // KB RATE TO FAIRLY FAT
+	SetKBRate(25, 25);
 	
 	// SET TO STANDARD MWO KBD CONFIG
 	SetKBLayout(KB_ENG);	
