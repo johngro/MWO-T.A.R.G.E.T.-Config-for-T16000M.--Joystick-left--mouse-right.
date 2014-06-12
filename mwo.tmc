@@ -91,9 +91,9 @@ int BasicStartup () {
 
     // TURN THE KEYS 
     if(Init(&EventHandle)) return 1;
-   
-    // KB RATE TO FAIRLY FAT
-    SetKBRate(25, 25);
+
+    // 12 ms width keypulses, 15 ms delays
+    SetKBRate(12, 15);
     
     // SET TO STANDARD MWO KBD CONFIG
     SetKBLayout(KB_ENG);    
@@ -129,15 +129,15 @@ int ConfigJoyAxes() {
       PULSE+'x',
       // BACK UP THROTTLE IS TWICE AS SENSITIVE
       // USB[0x63] IS KEYPAD DOT / DEL KEY
-      CHAIN(PULSE+KP2, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP4, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP6, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP8, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP0, PULSE+USB[0x63]),
-      CHAIN(PULSE+KP0, PULSE+USB[0x63])
+      CHAIN(LOCK+PULSE+KP2, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP4, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP6, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP8, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP0, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP0, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP0, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP0, D(), PULSE+USB[0x63], LOCK),
+      CHAIN(LOCK+PULSE+KP0, D(), PULSE+USB[0x63], LOCK)
     ));
 
     PuttPutt = CHAIN(
